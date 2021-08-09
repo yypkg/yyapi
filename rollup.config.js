@@ -2,7 +2,7 @@ import serve from 'rollup-plugin-serve'
 import livereload from 'rollup-plugin-livereload'
 import { terser } from 'rollup-plugin-terser'
 import banner from 'rollup-plugin-banner'
-import babel from '@rollup/plugin-babel'
+import { getBabelOutputPlugin } from '@rollup/plugin-babel'
 import typescript from 'rollup-plugin-typescript2'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
@@ -25,12 +25,21 @@ export default {
     resolve({ jsnext: true, preferBuiltins: true, browser: true }),
     commonjs(),
     typescript(),
-    babel({
-      babelrc: false,
-      babelHelpers: 'bundled',
-      exclude: 'node_modules',
+    getBabelOutputPlugin({
+      allowAllFormats: true,
+      comments: false,
       presets: [
-        ['@babel/env', { modules: false }]
+        [
+          '@babel/preset-env',
+          {
+            targets: {
+              browsers: [
+                'Android >= 4.4',
+                'iOS >= 9.0'
+              ]
+            }
+          }
+        ]
       ]
     }),
     IS_TEST_ENV && serve(TEST_DIR),

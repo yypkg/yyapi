@@ -1,8 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": "./src",
-    "target": "esnext",
-    "module": "esnext",
+    "target": "es5",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "strictNullChecks": true,
