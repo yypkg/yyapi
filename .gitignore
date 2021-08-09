@@ -1,0 +1,3 @@
+__test__/*.js
+__test__/*.js.map
+dist
