@@ -1,6 +1,6 @@
 {
   "name": "yyapi",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "dist/index.js",
   "repository": "https://github.com/yypkg/yyapi.git",
   "author": "lijialiang@joyy.sg",
