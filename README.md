@@ -18,7 +18,6 @@ npm i yyapi
 import { createAPI, API, Sender, Method } from 'yyapi'
 
 interface CustomAPI extends API{
-  [key: string]: Sender
   test1: Sender
   test2: Sender<{ id: number }>
 }
@@ -80,7 +79,6 @@ interface ResponseData {
 }
 
 interface CustomAPI extends API {
-  [key: string]: Sender
   test: Sender<ResponseData, RequestData>
 }
 
@@ -115,7 +113,6 @@ interface ResponseData {
 }
 
 interface CustomAPI extends API {
-  [key: string]: Sender
   test: Sender<ResponseData, RequestData, RequestConfig>
 }
 
