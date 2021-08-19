@@ -1,18 +1,17 @@
-import { Method, Sender } from 'types'
-import { createAPI } from './index'
+import { createAPI, Sender, Method, API } from './index'
 
 interface User {
   id: number
 }
 
-interface API {
+interface CustomAPI extends API {
   [key: string]: Sender
   test1: Sender<User[]>
   test2: Sender
   test3: Sender<User, { name: string }, { keys: { id: number } }>
 }
 
-const api = createAPI<API>({
+const api = createAPI<CustomAPI>({
   /**
    * 测试地址 1
    */
