@@ -45,21 +45,35 @@ export function createSender (namespace: string, url: Url, config: AxiosRequestC
     try {
       // onBeforeRequest
       if (events.onBeforeRequest !== undefined) {
-        await events.onBeforeRequest(namespace, url, $config)
+        await events.onBeforeRequest({
+          namespace,
+          url,
+          config: $config
+        })
       }
 
       const response = await axios($config)
 
       // onBeforeReturnResponse
       if (events.onBeforeReturnResponse !== undefined) {
-        await events.onBeforeReturnResponse(namespace, url, $config, response)
+        await events.onBeforeReturnResponse({
+          namespace,
+          url,
+          config: $config,
+          response
+        })
       }
 
       return response.data
     } catch (error) {
       // onErrror
       if (error.isAxiosError === true && events.onError !== undefined) {
-        await events.onError(namespace, url, $config, error)
+        await events.onError({
+          namespace,
+          url,
+          config: $config,
+          error
+        })
       }
       throw error
     }

@@ -29,13 +29,14 @@ const api = createAPI<CustomAPI>({
     token: '1234567890'
   }
 }, {
-  async onBeforeRequest (namespace, url, config) {
-    console.log('beforeRequest', config.url)
+  async onBeforeRequest ({ namespace, url, config }) {
+    console.log('beforeRequest [token]', config.headers.token)
+    config.headers.token = '0987654321'
   },
-  async onBeforeReturnResponse (namespace, url, config) {
-    console.log('onBeforeReturnResponse', namespace, config)
+  async onBeforeReturnResponse ({ namespace, url, config, response }) {
+    console.log('onBeforeReturnResponse [token]', config.headers.token, response.status)
   },
-  async onError (namespace, url, config, error) {
+  async onError ({ namespace, url, config, error }) {
     console.log('onerror', namespace, config, error.message)
   }
 })
@@ -62,7 +63,7 @@ const testcase3 = async (): Promise<void> => {
 }
 
 Promise.all([
-  // testcase1()
+  testcase1()
   // testcase2()
-  testcase3()
+  // testcase3()
 ]).catch(error => console.error(error))

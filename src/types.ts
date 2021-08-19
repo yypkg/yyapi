@@ -48,13 +48,28 @@ export interface Events {
   /**
    * 发送请求前回调，可用于注入 headers 参数等功能
    */
-  onBeforeRequest?: (namespace: string, url: Url, config: RequestConfig) => Promise<void>
+  onBeforeRequest?: ({ namespace, url, config }: {
+    namespace: string
+    url: Url
+    config: RequestConfig
+  }) => Promise<void>
   /**
    * 请求成功后，还未返回数据前的回调，可用于动态包裹返回数据等功能
    */
-  onBeforeReturnResponse?: (namespace: string, url: Url, config: RequestConfig, response: AxiosResponse) => Promise<void>
+  onBeforeReturnResponse?: ({ namespace, url, config, response }: {
+    namespace: string
+    url: Url
+    config: RequestConfig
+    response: AxiosResponse
+  }) => Promise<void>
   /**
    * 请求失败回调，可用于统一接口请求失败上报等功能
    */
-  onError?: (namespace: string, url: Url, config: RequestConfig, error: AxiosError) => Promise<void>
+  onError?: ({ namespace, url, config, error }: {
+    namespace: string
+    url: Url
+    config:
+    RequestConfig
+    error: AxiosError
+  }) => Promise<void>
 }

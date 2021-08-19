@@ -34,17 +34,21 @@ const api = createAPI<CustomAPI>({
     token: '1234567890'
   }
 }, {
-  async onBeforeRequest (namespace, url, config) {
+  async onBeforeRequest ({ namespace, url, config }) {
     // 发送请求前回调，可用于注入 headers 参数等功能
     // namespace 命名空间，如 test1、test2
-    // url 请求的 url 地址
-    // config 所有请求的参数
+    // url 请求的 <Url> 参数
+    // config 请求的参数
+    config.headers.token = '0987654321'
+    console.log('onBeforeRequest', namespace)
   },
-  async onBeforeReturnResponse (namespace, url, config) {
+  async onBeforeReturnResponse ({ namespace, url, config, response }) {
     // 请求成功后，还未返回数据前的回调，可用于动态包裹返回数据等功能
+    console.log('onBeforeReturnResponse', response.status)
   },
-  async onError (namespace, url, config, error) {
+  async onError ({ namespace, url, config, error }) {
     // 请求失败回调，可用于统一接口请求失败上报等功能
+    console.log('onerror', error.message)
   }
 })
 
