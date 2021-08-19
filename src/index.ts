@@ -1,2 +1,2 @@
-export * from './types'
+export { Sender } from './types'
 export { createAPI } from './api'
