@@ -1,6 +1,6 @@
 # YYAPI
 
-基于 **[Axios](https://github.com/axios/axios)** 的集中形接口管理模块
+基于 **[Axios](https://github.com/axios/axios)** 集约型 API 接口管理模块
 
 ## 安装
 
