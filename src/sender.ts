@@ -60,7 +60,7 @@ export function createSender (namespace: string, url: Url, options: Options, eve
     } catch (error) {
       // onErrror
       if (error.isAxiosError === true && events.onError !== undefined) {
-        events.onError(namespace, url, $options, error)
+        await events.onError(namespace, url, $options, error)
       }
       throw error
     }

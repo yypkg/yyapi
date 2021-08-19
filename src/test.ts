@@ -1,7 +1,18 @@
-import { Method } from 'types'
+import { Method, Sender } from 'types'
 import { createAPI } from './index'
 
-const api = createAPI({
+interface User {
+  id: number
+}
+
+interface API {
+  [key: string]: Sender
+  test1: Sender<User[]>
+  test2: Sender
+  test3: Sender
+}
+
+const api = createAPI<API>({
   /**
    * 测试地址 1
    */
@@ -22,7 +33,7 @@ const api = createAPI({
   async onBeforeReturnResponse (namespace, url, options) {
     console.log('onBeforeReturnResponse', namespace, options)
   },
-  onError (namespace, url, options, error) {
+  async onError (namespace, url, options, error) {
     console.log('onerror', namespace, options, error.message)
   }
 })
@@ -43,7 +54,7 @@ const testcase2 = async (): Promise<void> => {
 
 /// RESTful
 const testcase3 = async (): Promise<void> => {
-  const data = await api.test1.get<Array<{ id: number }>>({ code: 1 })
+  const data = await api.test1.get({ code: 1 })
   console.log(data[0]?.id)
 }
 

@@ -19,8 +19,14 @@ export type Url = string | {
   method: Method
 }
 
-export interface Urls {
-  [key: string]: Url
+export type PromiseResponseData<T = any> = Promise<T>
+
+export interface API {
+  [key: string]: Sender
+}
+
+export type Urls<T = API> = {
+  [K in keyof T]: Url
 }
 
 export interface ExtendOptions {
@@ -34,13 +40,13 @@ export interface ExtendOptions {
 
 export type Options = AxiosRequestConfig
 
-export interface Sender {
-  <T extends any>(data?: any | undefined, options?: Options & ExtendOptions | undefined): Promise<T>
-  get: <T extends any>(data?: any | undefined, options?: Options & ExtendOptions | undefined) => Promise<T>
-  post: <T extends any>(data?: any | undefined, options?: Options & ExtendOptions | undefined) => Promise<T>
-  put: <T extends any>(data?: any | undefined, options?: Options & ExtendOptions | undefined) => Promise<T>
-  patch: <T extends any>(data?: any | undefined, options?: Options & ExtendOptions | undefined) => Promise<T>
-  delete: <T extends any>(data?: any | undefined, options?: Options & ExtendOptions | undefined) => Promise<T>
+export interface Sender<T = any> {
+  (data?: any | undefined, options?: Options & ExtendOptions | undefined): PromiseResponseData<T>
+  get: (data?: any | undefined, options?: Options & ExtendOptions | undefined) => PromiseResponseData<T>
+  post: (data?: any | undefined, options?: Options & ExtendOptions | undefined) => PromiseResponseData<T>
+  put: (data?: any | undefined, options?: Options & ExtendOptions | undefined) => PromiseResponseData<T>
+  patch: (data?: any | undefined, options?: Options & ExtendOptions | undefined) => PromiseResponseData<T>
+  delete: (data?: any | undefined, options?: Options & ExtendOptions | undefined) => PromiseResponseData<T>
 }
 
 export interface Events {
@@ -55,5 +61,5 @@ export interface Events {
   /**
    * 请求失败回调，可用于统一接口请求失败上报等功能
    */
-  onError?: (namespace: string, url: Url, options: Options & ExtendOptions, error: AxiosError) => void
+  onError?: (namespace: string, url: Url, options: Options & ExtendOptions, error: AxiosError) => Promise<void>
 }

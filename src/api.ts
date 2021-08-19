@@ -1,19 +1,19 @@
 import {
   Urls,
+  API,
   Options,
-  Sender,
   Events
 } from './types'
 import { createSender } from './sender'
 
-export function createAPI<U extends Urls> (
-  urls: U,
+export function createAPI<T extends API> (
+  urls: Urls<T>,
   options: Options | null,
   events: Events | null
-): { [K in keyof U]: Sender } {
+): T {
   const api = Object()
 
-  for (const k of Object.keys(urls)) {
+  for (const k in urls) {
     const url = urls[k]
     api[k] = createSender(k, url, options ?? {}, events ?? {})
   }
