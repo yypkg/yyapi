@@ -9,8 +9,8 @@ import { createSender } from './sender'
 
 export function createAPI<T extends API> (
   urls: Urls<T>,
-  config: AxiosRequestConfig | null,
-  events: Events | null
+  config?: AxiosRequestConfig,
+  events?: Events
 ): T {
   const api = Object()
 
