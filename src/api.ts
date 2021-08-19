@@ -1,21 +1,22 @@
+import { AxiosRequestConfig } from 'axios'
+
 import {
   Urls,
   API,
-  Options,
   Events
 } from './types'
 import { createSender } from './sender'
 
 export function createAPI<T extends API> (
   urls: Urls<T>,
-  options: Options | null,
+  config: AxiosRequestConfig | null,
   events: Events | null
 ): T {
   const api = Object()
 
   for (const k in urls) {
     const url = urls[k]
-    api[k] = createSender(k, url, options ?? {}, events ?? {})
+    api[k] = createSender(k, url, config ?? {}, events ?? {})
   }
 
   return api

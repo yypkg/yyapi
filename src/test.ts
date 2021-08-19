@@ -9,7 +9,7 @@ interface API {
   [key: string]: Sender
   test1: Sender<User[]>
   test2: Sender
-  test3: Sender
+  test3: Sender<User, { name: string }, { keys: { id: number } }>
 }
 
 const api = createAPI<API>({
@@ -21,20 +21,23 @@ const api = createAPI<API>({
     url: 'https://google.com',
     method: Method.Delete
   },
-  test3: 'https://yapi.joyyued.com/mock/114/checklist/detail/:id'
-}, {
-  headers: {
-    token: null
+  test3: {
+    url: 'https://yapi.joyyued.com/mock/114/checklist/detail/:id',
+    method: Method.Get
   }
 }, {
-  async onBeforeRequest (namespace, url, options) {
-    console.log('beforeRequest', options.url)
+  headers: {
+    token: '1234567890'
+  }
+}, {
+  async onBeforeRequest (namespace, url, config) {
+    console.log('beforeRequest', config.url)
   },
-  async onBeforeReturnResponse (namespace, url, options) {
-    console.log('onBeforeReturnResponse', namespace, options)
+  async onBeforeReturnResponse (namespace, url, config) {
+    console.log('onBeforeReturnResponse', namespace, config)
   },
-  async onError (namespace, url, options, error) {
-    console.log('onerror', namespace, options, error.message)
+  async onError (namespace, url, config, error) {
+    console.log('onerror', namespace, config, error.message)
   }
 })
 
@@ -55,7 +58,7 @@ const testcase2 = async (): Promise<void> => {
 
 /// keys
 const testcase3 = async (): Promise<void> => {
-  const data = await api.test3(null, { keys: { id: 12 } })
+  const data = await api.test3({ name: 'xxx' }, { keys: { id: 12 } })
   console.log(data)
 }
 

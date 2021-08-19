@@ -29,7 +29,7 @@ export type Urls<T = API> = {
   [K in keyof T]: Url
 }
 
-export interface ExtendOptions {
+export interface ExtendConfig {
   /**
    * 设置 url 参数键对值，例如 /url/:id 可设置 keys = { id: 值 }
    */
@@ -38,21 +38,23 @@ export interface ExtendOptions {
   }
 }
 
-export type Options = AxiosRequestConfig
+export type RequestConfig = AxiosRequestConfig & ExtendConfig
 
-export type Sender<T = any> = (data?: any | undefined, options?: AxiosRequestConfig & ExtendOptions | undefined) => PromiseResponseData<T>
+export type RequestData = any | undefined
+
+export type Sender<T = any, D = any, C = RequestConfig> = (data?: D extends any ? D : RequestData, config?: C extends RequestConfig ? C : RequestConfig) => PromiseResponseData<T>
 
 export interface Events {
   /**
    * 发送请求前回调，可用于注入 headers 参数等功能
    */
-  onBeforeRequest?: (namespace: string, url: Url, options: Options & ExtendOptions) => Promise<void>
+  onBeforeRequest?: (namespace: string, url: Url, config: RequestConfig) => Promise<void>
   /**
    * 请求成功后，还未返回数据前的回调，可用于动态包裹返回数据等功能
    */
-  onBeforeReturnResponse?: (namespace: string, url: Url, options: Options & ExtendOptions, response: AxiosResponse) => Promise<void>
+  onBeforeReturnResponse?: (namespace: string, url: Url, config: RequestConfig, response: AxiosResponse) => Promise<void>
   /**
    * 请求失败回调，可用于统一接口请求失败上报等功能
    */
-  onError?: (namespace: string, url: Url, options: Options & ExtendOptions, error: AxiosError) => Promise<void>
+  onError?: (namespace: string, url: Url, config: RequestConfig, error: AxiosError) => Promise<void>
 }

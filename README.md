@@ -19,8 +19,8 @@ import { createAPI, Sender, Method } from 'yyapi'
 
 interface API {
   [key: string]: Sender
-  test1: Sender<{ id: number }>
-  test2: Sender
+  test1: Sender
+  test2: Sender<{ id: number }>
 }
 
 // 实例化
@@ -35,23 +35,23 @@ const api = createAPI<API>({
     token: '1234567890'
   }
 }, {
-  async onBeforeRequest (namespace, url, options) {
+  async onBeforeRequest (namespace, url, config) {
     // 发送请求前回调，可用于注入 headers 参数等功能
     // namespace 命名空间，如 test1、test2
     // url 请求的 url 地址
-    // options 所有请求的参数
+    // config 所有请求的参数
   },
-  async onBeforeReturnResponse (namespace, url, options) {
+  async onBeforeReturnResponse (namespace, url, config) {
     // 请求成功后，还未返回数据前的回调，可用于动态包裹返回数据等功能
   },
-  async onError (namespace, url, options, error) {
+  async onError (namespace, url, config, error) {
     // 请求失败回调，可用于统一接口请求失败上报等功能
   }
 })
 
 // 请求接口
-const data = await api.test1()
-console.log(data.id)
+api.test1() // Promise<any>
+api.test2() // Promise<{ id: number }>
 ```
 
 ### 配置项
@@ -66,28 +66,63 @@ createAPI(<Urls>, <AxiosRequestConfig>, <Events>)
 
 ### Data
 
-```js
-import { createAPI } from 'yyapi'
+```ts
+import { createAPI, Sender } from 'yyapi'
 
-const api = createAPI({
+// 定义请求数据类型
+interface RequestData {
+  id: number
+}
+
+// 定义返回数据类型
+interface ResponseData {
+  name: string
+}
+
+interface API {
+  [key: string]: Sender
+  test: Sender<ResponseData, RequestData>
+}
+
+const api = createAPI<API>({
   test: '接口地址'
 })
 
-const data = { id: 1 }
-
 // Get 请求会自动转为 url 参数
-await api.test(data)
+api.test(<RequestData>) // Promise<ResponseData>
 ```
 
 ### Keys
 
-```js
-import { createAPI } from 'yyapi'
+```ts
+import { createAPI, Sender } from 'yyapi'
 
-const api = createAPI({
+// 定义请求数据类型
+interface RequestData {
+  id: number
+}
+
+// 定义请求配置数据类型
+interface RequestConfig {
+  keys: {
+    id: number
+  }
+}
+
+// 定义返回数据类型
+interface ResponseData {
+  name: string
+}
+
+interface API {
+  [key: string]: Sender
+  test: Sender<ResponseData, RequestData, RequestConfig>
+}
+
+const api = createAPI<API>({
   test: '接口地址/:id'
 })
 
 // 配置 keys 自动注入 url 参数
-await api.test(null, { keys: { id: 1 } })
+api.test(<RequestData>, <RequestConfig>) // Promise<ResponseData>
 ```

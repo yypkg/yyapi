@@ -1,66 +1,65 @@
 import {
   Url,
-  Options,
-  ExtendOptions,
+  RequestConfig,
   Sender,
   Events
 } from './types'
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 import { compile } from 'path-to-regexp'
 import URL from 'url-parse'
 
-export function createSender (namespace: string, url: Url, options: Options, events: Events): Sender {
-  async function sender <T extends any> ($data?: any | undefined, $options: Options & ExtendOptions = {}): Promise<T> {
+export function createSender (namespace: string, url: Url, config: AxiosRequestConfig, events: Events): Sender {
+  async function sender ($data?: any | undefined, $config: RequestConfig = {}): Promise<any> {
     // 注入 url
     if (typeof url === 'string') {
-      $options.url ?? ($options.url = url)
+      $config.url ?? ($config.url = url)
     } else {
-      $options.url ?? ($options.url = url.url)
-      $options.method ?? ($options.method = url.method)
+      $config.url ?? ($config.url = url.url)
+      $config.method ?? ($config.method = url.method)
     }
 
-    // 合并基本 options
-    $options = Object.assign(options, $options)
+    // 合并基本 config
+    $config = Object.assign(config, $config)
 
-    if ($options.url === undefined) throw new Error(`API-${namespace}, url undefined`)
+    if ($config.url === undefined) throw new Error(`API-${namespace}, url undefined`)
 
     // keys
-    if ($options.keys !== undefined) {
-      if ($options.url.startsWith('http')) {
-        const { origin, pathname } = new URL($options.url)
-        $options.url = `${origin}${compile(pathname)($options.keys)}`
+    if ($config.keys !== undefined) {
+      if ($config.url.startsWith('http')) {
+        const { origin, pathname } = new URL($config.url)
+        $config.url = `${origin}${compile(pathname)($config.keys)}`
       } else {
-        $options.url = compile($options.url)($options.keys)
+        $config.url = compile($config.url)($config.keys)
       }
     }
 
     // 注入 data
     if ($data !== undefined) {
-      if ($options.method === 'GET') {
-        $options.params = $data
+      if ($config.method === 'GET') {
+        $config.params = $data
       } else {
-        $options.data = $data
+        $config.data = $data
       }
     }
 
     try {
       // onBeforeRequest
       if (events.onBeforeRequest !== undefined) {
-        await events.onBeforeRequest(namespace, url, $options)
+        await events.onBeforeRequest(namespace, url, $config)
       }
 
-      const response = await axios($options)
+      const response = await axios($config)
 
       // onBeforeReturnResponse
       if (events.onBeforeReturnResponse !== undefined) {
-        await events.onBeforeReturnResponse(namespace, url, $options, response)
+        await events.onBeforeReturnResponse(namespace, url, $config, response)
       }
 
       return response.data
     } catch (error) {
       // onErrror
       if (error.isAxiosError === true && events.onError !== undefined) {
-        await events.onError(namespace, url, $options, error)
+        await events.onError(namespace, url, $config, error)
       }
       throw error
     }
