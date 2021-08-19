@@ -79,22 +79,6 @@ const data = { id: 1 }
 await api.test(data)
 ```
 
-### RESTful
-
-```js
-import { createAPI } from 'yyapi'
-
-const api = createAPI({
-  test: '接口地址'
-})
-
-await api.test.get()
-await api.test.post()
-await api.test.put()
-await api.test.patch()
-await api.test.delete()
-```
-
 ### Keys
 
 ```js

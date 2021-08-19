@@ -66,11 +66,5 @@ export function createSender (namespace: string, url: Url, options: Options, eve
     }
   }
 
-  sender.get = async <T extends any> ($data?: any | undefined, $options: Options = { method: 'GET' }): Promise<T> => await sender($data, $options)
-  sender.post = async <T extends any> ($data?: any | undefined, $options: Options = { method: 'POST' }): Promise<T> => await sender($data, $options)
-  sender.put = async <T extends any> ($data?: any | undefined, $options: Options = { method: 'PUT' }): Promise<T> => await sender($data, $options)
-  sender.patch = async <T extends any> ($data?: any | undefined, $options: Options = { method: 'PATCH' }): Promise<T> => await sender($data, $options)
-  sender.delete = async <T extends any> ($data?: any | undefined, $options: Options = { method: 'DELETE' }): Promise<T> => await sender($data, $options)
-
   return sender
 }

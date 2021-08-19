@@ -40,7 +40,8 @@ const api = createAPI<API>({
 
 /// 成功返回
 const testcase1 = async (): Promise<void> => {
-  console.log(await api.test1())
+  const data = await api.test1()
+  console.log(data)
 }
 
 /// 请求失败
@@ -52,21 +53,14 @@ const testcase2 = async (): Promise<void> => {
   }
 }
 
-/// RESTful
-const testcase3 = async (): Promise<void> => {
-  const data = await api.test1.get({ code: 1 })
-  console.log(data[0]?.id)
-}
-
 /// keys
-const testcase4 = async (): Promise<void> => {
-  console.log(await api.test3(null, { keys: { id: 12 } }))
+const testcase3 = async (): Promise<void> => {
+  const data = await api.test3(null, { keys: { id: 12 } })
+  console.log(data)
 }
 
 Promise.all([
   // testcase1()
   // testcase2()
-  // testcase3()
-  testcase4()
-  // testcase5()
+  testcase3()
 ]).catch(error => console.error(error))

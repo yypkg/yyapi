@@ -40,14 +40,7 @@ export interface ExtendOptions {
 
 export type Options = AxiosRequestConfig
 
-export interface Sender<T = any> {
-  (data?: any | undefined, options?: Options & ExtendOptions | undefined): PromiseResponseData<T>
-  get: (data?: any | undefined, options?: Options & ExtendOptions | undefined) => PromiseResponseData<T>
-  post: (data?: any | undefined, options?: Options & ExtendOptions | undefined) => PromiseResponseData<T>
-  put: (data?: any | undefined, options?: Options & ExtendOptions | undefined) => PromiseResponseData<T>
-  patch: (data?: any | undefined, options?: Options & ExtendOptions | undefined) => PromiseResponseData<T>
-  delete: (data?: any | undefined, options?: Options & ExtendOptions | undefined) => PromiseResponseData<T>
-}
+export type Sender<T = any> = (data?: any | undefined, options?: AxiosRequestConfig & ExtendOptions | undefined) => PromiseResponseData<T>
 
 export interface Events {
   /**
