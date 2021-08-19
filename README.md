@@ -15,16 +15,16 @@ npm i yyapi
 ### 基本使用
 
 ```ts
-import { createAPI, Sender, Method } from 'yyapi'
+import { createAPI, API, Sender, Method } from 'yyapi'
 
-interface API {
+interface CustomAPI extends API{
   [key: string]: Sender
   test1: Sender
   test2: Sender<{ id: number }>
 }
 
 // 实例化
-const api = createAPI<API>({
+const api = createAPI<CustomAPI>({
   test1: '接口地址',
   test2: {
     url: '接口地址',
@@ -57,7 +57,7 @@ api.test2() // Promise<{ id: number }>
 ### 配置项
 
 ```js
-createAPI(<Urls>, <AxiosRequestConfig>, <Events>)
+createAPI(<Urls>, <AxiosRequestConfig?>, <Events?>)
 ```
 
 * `Urls` 接口数据
@@ -67,7 +67,7 @@ createAPI(<Urls>, <AxiosRequestConfig>, <Events>)
 ### Data
 
 ```ts
-import { createAPI, Sender } from 'yyapi'
+import { createAPI, API, Sender } from 'yyapi'
 
 // 定义请求数据类型
 interface RequestData {
@@ -79,12 +79,12 @@ interface ResponseData {
   name: string
 }
 
-interface API {
+interface CustomAPI extends API {
   [key: string]: Sender
   test: Sender<ResponseData, RequestData>
 }
 
-const api = createAPI<API>({
+const api = createAPI<CustomAPI>({
   test: '接口地址'
 })
 
@@ -95,7 +95,7 @@ api.test(<RequestData>) // Promise<ResponseData>
 ### Keys
 
 ```ts
-import { createAPI, Sender } from 'yyapi'
+import { createAPI, API, Sender } from 'yyapi'
 
 // 定义请求数据类型
 interface RequestData {
@@ -114,12 +114,12 @@ interface ResponseData {
   name: string
 }
 
-interface API {
+interface CustomAPI extends API {
   [key: string]: Sender
   test: Sender<ResponseData, RequestData, RequestConfig>
 }
 
-const api = createAPI<API>({
+const api = createAPI<CustomAPI>({
   test: '接口地址/:id'
 })
 
